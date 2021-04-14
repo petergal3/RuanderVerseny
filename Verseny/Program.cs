@@ -59,7 +59,8 @@ namespace Verseny
             {
                 if (item.nev == nev)
                 {
-                    Console.WriteLine(item.magassag);
+                    double magassag = Math.Round(item.magassag * 2.57, 1);
+                    Console.WriteLine(magassag);
                     nemTalalt = false;
                 }
                
