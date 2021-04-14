@@ -39,10 +39,90 @@ namespace Verseny
             Console.WriteLine("\nFeladat 5 Legkorábbi pályáralépés ideje:");
             LegkorabbiPalyaralepes();
 
+
+            Console.WriteLine("\nFeladat 6,");
+            if (IdoUtanVanPalyaraLepesNincs("2020.01.01"))
+            {
+                Console.WriteLine("Nem volt");
+            }
+            else
+            {
+                Console.WriteLine("Volt");
+            }
+
+            Console.WriteLine("\nFeladat 7,");
+            Console.WriteLine($"A John nevet {DbNevTartalmazza("John")}db játékos neve tartalmazza");
+
+            Console.WriteLine("\nFeladat 8,");
+            LeggyakoribbNevek();
             Console.ReadLine();
 
         }
 
+
+        public static void LeggyakoribbNevek() 
+        {
+            Dictionary<string, int> nevekgyakorisaga = new Dictionary<string, int>();
+            List<string> gyakorinevek = new List<string> { "Joe", "John", "Jim", "Jack" };
+            foreach (var item in versenyzok)
+            {
+                foreach (var nev in gyakorinevek)
+                {
+                    if (item.nev.Contains(nev))
+                    {
+                        if (nevekgyakorisaga.ContainsKey(nev))
+                        {
+                            nevekgyakorisaga[nev]++;
+                        }
+                        else
+                        {
+                            nevekgyakorisaga.Add(nev, 1);
+                        }
+
+                    }
+
+                }
+            }
+            StreamWriter str = new StreamWriter("kernevek.txt");
+            str.WriteLine("név;db"); 
+
+            foreach (var nevek in nevekgyakorisaga)
+            {
+                Console.WriteLine($"{nevek.Key};{nevek.Value}");
+                str.WriteLine($"{nevek.Key};{nevek.Value}");
+            }
+            
+
+        }
+
+        public static int DbNevTartalmazza(string nev) 
+        {
+            int i = 0;
+            foreach (var item in versenyzok)
+            {
+                if (item.nev.Contains(nev))
+                {
+                    i++;
+                }
+            }
+
+            return i;
+        }
+
+        public static bool IdoUtanVanPalyaraLepesNincs(string datum) 
+        {
+            DateTime vegeDatum = DateTime.Parse(datum);
+            bool nemVoltUtana = true;
+            foreach (var item in versenyzok)
+            {
+                if (item.utolso > vegeDatum)
+                {
+                    nemVoltUtana = false;
+                }
+            }
+
+            return nemVoltUtana;
+        }
 
         public static DateTime LegkorabbiPalyaralepes() 
         {
