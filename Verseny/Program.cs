@@ -33,10 +33,29 @@ namespace Verseny
             string nev = Console.ReadLine();
             NevVizsgalat(nev);
 
+            Console.WriteLine("\nFeladat 4 (Listázza a megadott időszakban az első alkalommal pályáralépett versenyzőket):");
+            PalyaraLeptekEloszorIdoszakban();
+
+            Console.WriteLine("\nFeladat 5 Legkorábbi pályáralépés ideje:");
+            LegkorabbiPalyaralepes();
+
             Console.ReadLine();
 
         }
 
+
+        public static DateTime LegkorabbiPalyaralepes() 
+        {
+            DateTime legkorabbi = DateTime.MaxValue;
+            foreach (var item in versenyzok)
+            {
+                if (item.elso < legkorabbi )
+                {
+                    legkorabbi = item.elso;
+                }
+            }
+            return legkorabbi;
+        }
         public static void PalyaraLeptekEloszorEvben(string idöszakEleje, string idöszakvege) 
         {
             Console.WriteLine($"Első alkalommal volt pályán:");
@@ -68,6 +87,37 @@ namespace Verseny
             if (nemTalalt)
             {
                 Console.WriteLine("Hibás adat");
+            }
+        }
+
+        public static void PalyaraLeptekEloszorIdoszakban()
+        {
+            DateTime idöszakElejedatum;
+            DateTime idöszakVegedatum;
+            Console.WriteLine("Add meg listázandó versenyzők első pályára lépésének kezdődátumát");
+            string idöszakEleje = Console.ReadLine();
+            while (!DateTime.TryParse(idöszakEleje, out idöszakElejedatum))
+            {
+                Console.WriteLine("Hibás formátumban adtad meg a dátumot. próbáld újra");
+                idöszakEleje = Console.ReadLine();
+            }
+            
+            Console.WriteLine("Add meg listázandó versenyzők első pályára lépésének kezdődátumát");
+            string idöszakVege = Console.ReadLine();
+            while (!DateTime.TryParse(idöszakVege, out idöszakVegedatum) && idöszakVegedatum < idöszakElejedatum)
+            {
+                Console.WriteLine("Hibás formátumban adtad meg a dátumot vagy a vége dátum. próbáld újra");
+                idöszakVege = Console.ReadLine();
+            }
+            
+            
+            Console.WriteLine($"Első alkalommal volt pályán az időszakban:");
+            foreach (var item in versenyzok)
+            {
+                if (item.elso > idöszakElejedatum && idöszakVegedatum > item.elso)
+                {
+                    Console.WriteLine($"{item.ToString()}\n");
+                }
             }
         }
     }
